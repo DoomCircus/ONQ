@@ -312,7 +312,7 @@
 		*	Outputs	:	Adds target users to the advertisement
 		*	Returns	:	None
 		----------------------------------------------------------------------------------------*/
-		public function target($id = null) 
+		/* public function target($id = null) 
 		{
 			//If no ID was passed in
 			if (!$id) 
@@ -343,6 +343,6 @@
 				//Set the current advertisement to request data
 				$this->request->data = $qadvertisement;
 			}
-		}
+		} */
 	}
 ?>

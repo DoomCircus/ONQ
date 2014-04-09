@@ -11,7 +11,10 @@ class QAchievementsController extends AppController {
 		//debug("in filter");
 		
 		$this->loadModel('Qprofile','Qachievement');
-		if($this->Auth->user('role')=='user' || $this->Auth->user('role')=='admin')
+		/****************************************************************************************************************
+		*	No one is allowed to access QAchievementsController while the feature is not included in the application	*
+		****************************************************************************************************************/
+		/* if($this->Auth->user('role')=='user' || $this->Auth->user('role')=='admin')
 		{
 			$this->set('role', $this->Auth->user('role')); 
 			$this->Auth->allow('index','logout');//add this line for normal users
@@ -20,6 +23,7 @@ class QAchievementsController extends AppController {
 		{
 			$this->Auth->allow('register','login');
 		}
+		
 		 // Basic setup
 		$this->Auth->authenticate = array('Form');
 
@@ -27,7 +31,8 @@ class QAchievementsController extends AppController {
 		$this->Auth->authenticate = array(
 									'Basic' => array('userModel' => 'Qprofile'),
 									'Form' => array('userModel' => 'Qprofile')
-		);
+		); */
+		$this->redirect($this->webroot);
     }
 	
 	
@@ -122,7 +127,7 @@ class QAchievementsController extends AppController {
 		$qachievement =$this->Qachievement->find('all',array(
 		'joins' => array(
         array(
-            'table' => 'Qachievements',
+            'table' => 'Qachievement',
             'alias' => 'QachievementJoin',
             'type' => 'INNER',
             'conditions' => array(

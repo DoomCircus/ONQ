@@ -43,23 +43,29 @@
 			<div id="this-carousel-id" class="carousel slide">
 				<div class="carousel-inner">
 					<div class="item active">
-					  <img src="http://placehold.it/1200x480" alt="" />
+					  <img src="../img/header.png" alt="" />
 					  <div class="carousel-caption">
-						<p><h2>Caption 1</h2></p>
+						<p><h2></h2></p>
 					  </div>
 					</div>
 					<div class="item">
-					  <img src="http://placehold.it/1200x480" alt="" />
+					  <img src="../img/game.png" alt="" />
 					  <div class="carousel-caption">
 						<p><h2>Caption 2</h2></p>
 					  </div>
 					</div>
 					<div class="item">
-					  <img src="http://placehold.it/1200x480" alt="" />
+					  <img src="../img/analytics.png" alt="" />
 					  <div class="carousel-caption">
 						<p><h2>Caption 3</h2></p>
 					  </div>
-				</div>
+					</div>
+					<div class="item">
+					  <img src="../img/onqkids.png" alt="" />
+					  <div class="carousel-caption">
+						<p><h2>Caption 4</h2></p>
+					  </div>
+					</div>
 			  </div>
 				<a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
 				<a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
@@ -78,23 +84,10 @@
 					</div>
 					
 					<div class="col-md-8 well">
-						<----- Face . Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-						Duis dictum viverra magna at rutrum. Vestibulum eu neque et nisl egestas rhoncus. 
-						Nullam iaculis bibendum vehicula. Duis a sagittis nibh, ac commodo urna. Suspendisse 
-						quis lorem ut libero interdum fermentum. Donec quis purus elit. Pellentesque eget aliquam 
-						turpis. Morbi nec scelerisque purus. Mauris ut tristique eros. Quisque 
-						scelerisque, felis quis dapibus pulvinar, purus elit malesuada dui,
-						 quis iaculis tortor enim sit amet mauris.   
-						 
-						 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-						Duis dictum viverra magna at rutrum. Vestibulum eu neque et nisl egestas rhoncus. 
-						Nullam iaculis bibendum vehicula. Duis a sagittis nibh, ac commodo urna. Suspendisse 
-						quis lorem ut libero interdum fermentum. Donec quis purus elit. Pellentesque eget aliquam 
-						turpis. Morbi nec scelerisque purus. Mauris ut tristique eros. Quisque 
-						scelerisque, felis quis dapibus pulvinar, purus elit malesuada dui,
-						 quis iaculis tortor enim sit amet mauris. 	scelerisque, felis quis dapibus pulvinar,
-						 purus elit malesuada dui,
-						 quis iaculis tortor enim sit amet mauris. 
+					<h3>Create, share, and study with ONQ</h3>
+					ONQ is a platform that enables educators to create online groups of students to share study material.
+					Teachers can then create deck's of study cards with question and answer pairs which they can share.
+					ONQ enables the students to study these decks by playing games, taking tests and playing through flash Cards.
 				
 					</div>
 				</div>

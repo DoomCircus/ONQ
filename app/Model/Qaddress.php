@@ -6,8 +6,8 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 // app/Model/User.php
 class QAddress extends AppModel {
 
- public $belongsTo = 'Qprofile';
- 	public $useTable = 'QAddresses';
+	public $belongsTo = 'Qprofile';
+ 	public $useTable = 'Qaddresses';
 
 	public function beforeSave($options = array()) {
 	//debug("in beforesave");
@@ -24,35 +24,55 @@ class QAddress extends AppModel {
 	
 	
     public $validate = array(
-        'unitNumber' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A username is required'
-				
+        'unit' => array(
+            'between' => array(
+                'rule'    => array('between', 1, 3),
+                'message' => 'Between 1 to 3 characters'
             )
         ),
         'streetNumber' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A password is required'
+            'numeric' => array(
+                'rule'     => 'numeric',
+                'message'  => 'numbers only'
+            ),
+            'between' => array(
+                'rule'    => array('between', 0, 6),
+                'message' => 'Between 0 and 6 numbers'
             )
         ),
 		'streetName' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
-                'message' => 'A first name is required'
+                'message' => 'A street name is required'
+            )
+        ),
+		'city' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'A city is required'
             )
         ),
 		'stateProvince' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
-                'message' => 'A first name is required'
+                'message' => 'A province is required'
+            )
+        ),
+		'country' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'A country is required'
             )
         ),
 		'postalCode' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A first name is required'
+            'alphaNumeric' => array(
+                'rule'     => 'alphaNumeric',
+                'required' => true,
+                'message'  => 'Alphabets and numbers only'
+            ),
+            'between' => array(
+                'rule'    => array('between', 1, 6),
+                'message' => 'Between 1 to 6 characters'
             )
         )
 		

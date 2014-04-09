@@ -16,7 +16,7 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
+$cakeDescription = __d('cake_dev', 'ONQ');
 ?>
 <?php echo $this->Html->docType('html5'); ?> 
 <html>
@@ -169,7 +169,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		<?php echo $this->Html->charset(); ?>
 		<title>
 			<?php echo $cakeDescription ?>:
-			<?php echo $title_for_layout; ?>
+
 		</title>
 		<?php
 			echo $this->Html->meta('icon');

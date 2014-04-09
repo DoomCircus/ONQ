@@ -99,6 +99,33 @@ class QcardsController extends AppController {
 				return $this->redirect(array('action' => 'index'));
 			}
 		}
+		
+		public function test($dID)
+		{
+			
+			
+			 if (!$id) {
+				throw new NotFoundException(__('Invalid card'));
+			}
+
+			$this->Qcard->recursive = -1;
+			$qcard = $this->Qcard->find('first', array(
+			'conditions' => array('Qcard.cardID'=> $id),
+			'fields' => array('Qcard.cardID', 'Qcard.cardType', 'Qcard.question', 'Qcard.answer')));
+			if (!$qcard) {
+				throw new NotFoundException(__('Card does not exist'));
+			}
+			$cardCount = count($qcard);
+			if($cardCount > 4){
+			debug($qcard);
+			$this->set('qcard', $qcard);
+			}
+			else
+			{
+				throw new NotFoundException(__('Not enough cards in the deck'));
+			
+			}
+		}
 }
 
 ?>

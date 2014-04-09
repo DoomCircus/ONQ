@@ -2,7 +2,8 @@
 App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 class Qprofiledeck extends AppModel {
 
-  public $useTable ='Qprofiledecks';
+	public $useTable ='Qprofiledecks';
+	
 	  public $belongsTo = array(
         'Qprofile'=> array(
             'className' => 'Qprofile',

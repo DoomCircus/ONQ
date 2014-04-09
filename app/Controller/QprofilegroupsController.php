@@ -12,7 +12,7 @@ class QprofilegroupsController extends AppController {
 		$this->loadModel('Qgroup','Qprofile','Qprofilegroup','Qachievement');
 		if($this->Auth->user('role')=='user')
 		{
-			$this->Auth->allow('view','edit','index','add','join');//add this line for normal users
+			$this->Auth->allow('view','edit','index','add','join','members','delete');//add this line for normal users
 		}
 		else
 		{
@@ -43,7 +43,7 @@ class QprofilegroupsController extends AppController {
 	  
 	 //  $this->set('Qprofilegroups',
 	 
-	$Qgroups =	   $this->Qprofilegroup->find('all',array(
+	$Qgroups =	  $this->Qprofilegroup->find('all',array(
 	 'joins' => array(
         array(
             'table' => 'Qgroups',
@@ -59,16 +59,21 @@ class QprofilegroupsController extends AppController {
     ),
     'fields' => array('QgroupJoin.*','Qprofilegroup.*')
 	));
-	 $count;
+	 //$count;
+
 	foreach($Qgroups as $q)
 	{
     $count[] = $this->Qgroup->procedureDecks($q['QgroupJoin']['groupID']);
+	
 	}
 	
 	//debug($Qgroups);
-	//debug($count);
+	//debug($testss);
        $this->set('Qgroups', $Qgroups);
-	   $this->set('count', $count);
+	   if($Qgroups != null)
+	   {
+		$this->set('count', $count);
+		}
     }  
   
    
@@ -92,14 +97,13 @@ class QprofilegroupsController extends AppController {
 			$this->request->data['Qgroup']['groupCode'] = $this->generateCode($length = 10);
 			$this->request->data['Qgroup']['lastModified'] = date("Y-m-d H:i:s");
             if ($this->Qprofilegroup->saveAll($this->request->data, array('deep' => true))) {
-                $this->Session->setFlash(__('The group has been created'));
+               // $this->Session->setFlash(__('The group has been created'));
+				$this->Session->setFlash( 'New group has been created', 'default', array('class' => 'alert alert-success'));
                 return $this->redirect(array('action' => 'index'));
             }
-            $this->Session->setFlash(
-                __('The group could not be created. Please, try again.')
-            );
-
-    } 
+           // $this->Session->setFlash( __('The group could not be created. Please, try again.') );
+			$this->Session->setFlash( 'The group has NOT been Created', 'default', array('class' => 'alert alert-danger'));
+		} 
 	}
 
 
@@ -124,8 +128,16 @@ class QprofilegroupsController extends AppController {
     ),
     'fields' => array('QgroupJoin.*')
 	));
+	if($Qgroups != null)
+	{
+		return $Qgroups[0]['QgroupJoin']['groupID'];
+	}
+	else
+	{
+		return null;
+	}
 	//debug($Qgroups);
-	return $Qgroups[0]['QgroupJoin']['groupID'];
+	
 	}
 	
 	
@@ -140,27 +152,38 @@ class QprofilegroupsController extends AppController {
 			$this->Qprofilegroup->create();
 			$this->Qachievement->create();
 
+			//debug($this->findGroupCodeID($code));
+			
+			$mycodes = $this->findGroupCodeID($code);
 			//debug( 'joining');
+			if($mycodes!= null)
+			{
 			$this->request->data['Qprofilegroup']['profileID'] = $this->Auth->user('profileID');
 			$this->request->data['Qprofilegroup']['owner'] = 0;
-			debug($this->findGroupCodeID($code));
-			$this->request->data['Qprofilegroup']['groupID'] = $this->findGroupCodeID($code);
+			
+			$this->request->data['Qprofilegroup']['groupID'] = $mycodes;
+			
 			
 			//$this->Qachievement[][]
-			$this->request->data['Qachievement']['profileID'] = $this->Auth->user('profileID');
-			$this->request->data['Qachievement']['achievementID'] = 5;
-			$this->request->data['Qachievement']['progress'] = 100;
+			//$this->request->data['Qachievement']['profileID'] = $this->Auth->user('profileID');
+			//$this->request->data['Qachievement']['achievementID'] = 5;
+			//$this->request->data['Qachievement']['progress'] = 100;
 			
-            if ($this->Qachievement->saveAll($this->request->data)) {
+            //if ($this->Qachievement->saveAll($this->request->data)) {
 				if($this->Qprofilegroup->saveAll($this->request->data))
 				{
-                $this->Session->setFlash(__('you have joined a group'));
-                return $this->redirect(array('action' => 'index'));
+					//$this->Session->setFlash(__('you have joined a group'));
+					$this->Session->setFlash( 'you have joined a group', 'default', array('class' => 'alert alert-success'));
+					return $this->redirect(array('action' => 'index'));
+					//}
 				}
-            }
-            $this->Session->setFlash(
-                __('The group could not be joined')
-            );
+			}
+			else
+			{
+				//$this->Session->setFlash(__('There is no group with that Code'));
+				$this->Session->setFlash( 'There is no group with that Code', 'default', array('class' => 'alert alert-danger'));
+			}
+            
 
 		
 		}
@@ -201,12 +224,15 @@ class QprofilegroupsController extends AppController {
 			'Qgroup.groupDescription'=>"'$description'",'Qgroup.privatePublic'=>"'$private'"), array('Qgroup.groupID' => $this->data['Qgroup']['groupID'])))
 				{
 				
-					$this->Session->setFlash(__('Your group has been updated.'));
-					return $this->redirect(array('action' => 'index'));
+					//$this->Session->setFlash(__('Your group has been updated.'));
+					$this->Session->setFlash( 'your group has been updated', 'default', array('class' => 'alert alert-success'));
+					//return $this->redirect(array('action' => 'index'));
+					return $this->redirect($this->referer());
 				}
 				else
 				{
-					$this->Session->setFlash(__('Unable to update your group.'));
+					//$this->Session->setFlash(__('Unable to update your group.'));
+					$this->Session->setFlash( 'Unable to update your group', 'default', array('class' => 'alert alert-danger'));
 				}
 			}
 
@@ -227,13 +253,43 @@ class QprofilegroupsController extends AppController {
 			{
 				if($this->Qgroup->deleteAll(array('Qgroup.groupID' => $id), false))
 				{
-				$this->Session->setFlash(
-					__('The Group with id: %s has been deleted.', h($id))
-				);
-				return $this->redirect(array('action' => 'index'));
+				
+				$this->Session->setFlash('The Group with id: '.$id. ' has been deleted.','default',array('class' => 'alert alert-warning'));
+				//return $this->redirect(array('action' => 'index'));
+				return $this->redirect($this->referer());
 				}
 			}
 		}
+		
+		
+		
+		public function members($id)
+		{
+		$this->Qprofilegroup->recursive = -1;
+		$Qusers = $this->Qprofilegroup->find('all',array(
+		 'joins' => array(
+			array(
+				'table' => 'Qprofiles',
+				'type' => 'INNER',
+				'alias' => 'Qp',
+				'conditions' => array(
+					'Qp.profileID = Qprofilegroup.profileID'
+				)
+			)
+		),
+		'conditions' => array(
+			'Qprofilegroup.groupID' => $id,
+			'Qp.isActive' => true
+		),
+		'fields' => array('Qp.*','Qprofilegroup.*')
+		));
+    
+
+		//debug($Qusers);
+	   $this->set('Qusers', $Qusers);
+		
+		}
+		
 		
 		}
 ?>

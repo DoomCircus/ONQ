@@ -15,7 +15,7 @@ class Qprofile extends AppModel {
         )
 
     );*/
-public $useTable = 'Qprofiles';
+	public $useTable = 'Qprofiles';
 	public function beforeSave($options = array()) {
 	//debug("in beforesave");
 		if (isset($this->data[$this->alias]['password'])) {
@@ -30,46 +30,43 @@ public $useTable = 'Qprofiles';
 	
     public $validate = array(
         'userName' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A username is required'
-				
+            'alphaNumeric' => array(
+                'rule'     => 'alphaNumeric',
+                'required' => true,
+                'message'  => 'Alphabets and numbers only'
+            ),
+            'between' => array(
+                'rule'    => array('between', 5, 40),
+                'message' => 'Between 5 to 15 characters'
             )
         ),
         'password' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A password is required'
-            )
+            'rule'    => array('minLength', '8'),
+            'message' => 'Minimum 8 characters long'
         ),
 		'firstName' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A first name is required'
+            'between' => array(
+                'rule'    => array('between', 0, 20),
+                'message' => 'Cannot be more than 20 characters'
             )
         ),
 		'lastName' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A first name is required'
+            'between' => array(
+                'rule'    => array('between', 0, 20),
+                'message' => 'Cannot be more than 20 characters'
             )
         ),
-		'emailAddress' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A first name is required'
-            )
-        ),
+		'emailAddress' => 'email',
 		'dateCreated' => array(
             'required' => array(
-                'rule' => array('notEmpty')
+                'rule' => array('notEmpty'),
+				'message' => 'Must be a valid email'
             )
         ),
 		'dateOfBirth' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-				'message' => 'A date of birth is required'
-            )
+            'rule'       => 'date',
+            'message'    => 'Enter a valid date',
+            'allowEmpty' => true
         ),
         'role' => array(
             'valid' => array(
@@ -84,7 +81,17 @@ public $useTable = 'Qprofiles';
                 'message' => 'Must be a male or female cant be both or can you....',
                 'allowEmpty' => false
             )
+        ),
+		'phoneNumber' => array(
+            'numeric' => array(
+                'rule'     => 'numeric',
+                'message'  => 'numbers only'
             ),
+            'between' => array(
+                'rule'    => array('between', 10, 11),
+                'message' => 'Between 10 and 11 numbers'
+            )
+        ),
 		'profilePic' => array(
             'required' => array(
                 'rule' => array('notEmpty'),

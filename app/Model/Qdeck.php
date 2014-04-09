@@ -1,7 +1,7 @@
 <?php
 
 class Qdeck extends AppModel {
-	public $useTable = 'qdecks';
+	public $useTable = 'Qdecks';
 
     public $validate = array(
 			'deckType' => array(

@@ -733,7 +733,7 @@ class Model extends Object implements CakeEventListener {
 			if (!$this->displayField) {
 				unset($this->displayField);
 			}
-			$this->table = $this->useTable;
+			$this->table = ucfirst($this->useTable);
 			$this->tableToModel[$this->table] = $this->alias;
 		} elseif ($this->table === false) {
 			$this->table = Inflector::tableize($this->name);

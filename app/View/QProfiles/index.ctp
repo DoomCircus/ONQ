@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<h1>
-		<div class="loginform">
-		
+	<div class="loginform">
+			<h2>
 			<?php 
 				echo "Welcome ";
 				echo AuthComponent::user('userName');
@@ -11,21 +10,22 @@
 				echo $this->Session->flash('auth'); 
 				echo $this->Form->create('Logout'); 
 			?>
-			<div style="width: 100%; display: table;">
-				<div style="display: table-row">
-					<div style="width: 90px; display: table-cell;">
-						<?php 
-							echo $this->Form->submit('LOGOUT', array('name'=>'submit1'));
-						?>
+			</h2>
+				<div style="width: 100%; display: table;">
+					<div style="display: table-row">
+						<div style="width: 90px; display: table-cell;">
+							<?php 
+								echo $this->Html->link("LOGOUT", array('controller' => 'Qprofiles','action'=> 'logout'), array( 'class' => 'signbutton'))
+							?>
+						</div>
 					</div>
 				</div>
-			</div>
 		</div>
-	</h1>
+		<?php echo $this->Form->end(); ?>
 	</head>
 	<boby>
 		<?php if ($authUser) { ?>
-			<div class="container">
+			<div class="container" style="width: 1100px">
 				<div class="row" >
 					<div class="col-md-4">
 						Sidebar content our mission statement is ......

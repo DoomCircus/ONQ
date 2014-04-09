@@ -1,3 +1,7 @@
+
+<head>
+		
+</head>
 <h1>Add Card</h1>
 <?php
 echo $this->Form->create('Qcard', array(

@@ -4,7 +4,9 @@
 App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 
 // app/Model/User.php
-class Qprofile extends AppModel {
+class Qtype extends AppModel {
+
+	public $useTable = 'Qtypes';
 
 	public function beforeSave($options = array()) {
 	//debug("in beforesave");

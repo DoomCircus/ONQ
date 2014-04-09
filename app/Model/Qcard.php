@@ -1,7 +1,7 @@
 <?php
 
 class Qcard extends AppModel {
-	public $useTable = 'qcards';
+	public $useTable = 'Qcards';
 
     public $validate = array(
 			'cardType' => array(

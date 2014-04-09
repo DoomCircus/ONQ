@@ -7,6 +7,40 @@
  *  Description : edit.ctp allows the user to upload a different image for an advertisement
  -->
 
+ <head>
+	<style>
+	#header{
+		position:relative;
+		top: -20px;
+		width: 100%;
+		padding: 60px;
+		background: url('../../img/logo.png') left top no-repeat, linear-gradient(rgba(4,95,248,1), rgba(3,17,95,1));
+	}
+	</style>
+	<h1>
+		<div class="loginform">
+		<h2>
+			<?php 
+				echo "Welcome ";
+				echo AuthComponent::user('userName');
+				echo "!";
+				echo $this->Session->flash('auth'); 
+				echo $this->Form->create('Logout'); 
+			?>
+			</h2>
+				<div style="width: 100%; display: table;">
+					<div style="display: table-row">
+						<div style="width: 90px; display: table-cell;">
+							<?php 
+								echo $this->Html->link("LOGOUT", array('controller' => 'Qprofiles','action'=> 'logout'), array( 'class' => 'signbutton'))
+							?>
+						</div>
+					</div>
+				</div>
+		</div>
+		<?php echo $this->Form->end(); ?>
+	</h1>
+</head>
 <h1>Edit Advertisement</h1>
 <?php
 	//Creates a new form for the advertisement that the user wants to edit
@@ -21,13 +55,4 @@
 	echo $this->Form->input('Advertisement', array('id'=>'advertisement','type'=>'file','name'=>'advertisement','accept'=>'image/*'));
 	echo $this->Form->submit('Save Advertisement');
 	echo $this->Form->end();
-?>
-<br />
-<br />
-<?php
-	echo $this->Html->link(
-		'Back to Advertisements',
-		array('action' => 'index'),
-		array( 'class' => 'signbutton')
-	);
 ?>

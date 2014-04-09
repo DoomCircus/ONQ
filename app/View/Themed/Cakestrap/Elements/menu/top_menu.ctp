@@ -16,13 +16,19 @@
 			<!-- <li class="active"><a href="#">Link</a></li> -->
 			<li>
 				<?php
-					echo $this->Html->link($this->Html->image('../img/profilepic.png') . ' ' . __('Profile'),array('controller' => 'Qprofiles/view', 'action' => ''), array('escape' => false));
+					if($role == "admin" || $role == "user")
+					{
+						echo $this->Html->link($this->Html->image('../img/profilepic.png') . ' ' . __('Profile'),array('controller' => 'Qprofiles/view', 'action' => ''), array('escape' => false));
+					}
 				?>
 			</li>
 			<li>
 			
 				<?php
-					echo $this->Html->link($this->Html->image('../img/grouppic.png') . ' ' . __('Groups'),array('controller' => 'Qprofilegroups/index', 'action' => ''), array('escape' => false));
+					if($role == "admin" || $role == "user")
+					{
+						echo $this->Html->link($this->Html->image('../img/grouppic.png') . ' ' . __('Groups'),array('controller' => 'Qprofilegroups/index', 'action' => ''), array('escape' => false));
+					}
 				?>
 				
 				<!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="../img/grouppic.png">Groups <b class="caret"></b></a>
@@ -34,7 +40,10 @@
 			<li>
 			
 				<?php
-					echo $this->Html->link($this->Html->image('../img/deckspic.png') . ' ' . __('Decks'),array('controller' => 'Qprofiledecks/index', 'action' => ''), array('escape' => false));
+					if($role == "admin" || $role == "user")
+					{
+						echo $this->Html->link($this->Html->image('../img/deckspic.png') . ' ' . __('Decks'),array('controller' => 'Qprofiledecks/index', 'action' => ''), array('escape' => false));
+					}
 				?>
 				
 			<!--	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="../img/deckspic.png">Decks <b class="caret"></b></a>
@@ -50,10 +59,6 @@
 					{
 						echo $this->Html->Link('Advertisements', '/qadvertisements/index');
 					}
-					else if($role == "user")
-					{
-						echo $this->Html->Link('Achievements', '/qachievements/index');
-					}
 				 ?>
 			 </li>
 			 <li>
@@ -63,7 +68,29 @@
 						echo $this->Html->Link('Users', '/qprofiles/viewall');
 					}
 				 ?>
+				 
 			 </li>
+			 <li>
+				<?php
+					if($role == "admin")
+					{
+						echo $this->Html->Link('Analytics', '/qanalytics/admindash');
+					}
+				?>
+			 
+			 </li>			 
+			 <li>
+				<?php 
+					if($role == "admin" || $role == "user")
+					{
+						echo $this->Html->Link('Download', '/qmobile/download');
+					}
+				 ?>
+			 </li>
+		 
+			 
+			 
+			 
 		</ul><!-- /.nav navbar-nav -->
 	</div><!-- /.navbar-collapse -->
 </nav><!-- /.navbar navbar-default -->

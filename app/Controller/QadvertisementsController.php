@@ -72,18 +72,18 @@
 				is_uploaded_file($this->request->params['form']['advertisement']['tmp_name']))
 			{
 				//Move up from 'webroot' folder (into 'app') then into 'Images' folder
-				$pathInPieces = explode('\\', getcwd()); //Break the full file path into an array of strings and remove DOS-format '\'
-				$appRoot = "file:///"; //Prepend "file:///" (necessary for the web browser to reference the file)
+				//$pathInPieces = explode('/', getcwd()); //Break the full file path into an array of strings and remove DOS-format '\'
+				//$appRoot = "file:///"; //Prepend "file:///" (necessary for the web browser to reference the file)
 				
 				/*$appRoot = "file:///FRANCIS-PC/"; -> attempting to use shared folder for images
 				for ($x = 3; $x < count($pathInPieces)-1; ++$x) ->cuts off prepended "C:\xampp\etc..." to prepend with location of shared folder*/
 				
 				//For each piece of the file path
-				for ($x = 0; $x < count($pathInPieces)-1; ++$x)
-				{
-					$appRoot .= $pathInPieces[$x].'/'; //Rebuild file path with '/'s (web browsers won't read DOS-format paths)
-				}
-				$appRoot .= 'Images/'; //Append final piece of file path
+				//for ($x = 0; $x < count($pathInPieces)-1; ++$x)
+				//{
+				//	$appRoot .= $pathInPieces[$x].'/'; //Rebuild file path with '/'s (web browsers won't read DOS-format paths)
+				//}
+				$appRoot = '../Images/'; //Append final piece of file path
 				
 				// Strip path information
 				$filename = basename($this->request->params['form']['advertisement']['name']);
@@ -169,18 +169,18 @@
 			{	
 			
 				//Move up from 'webroot' folder (into 'app') then into 'Images' folder
-				$pathInPieces = explode('\\', getcwd()); //Break the full file path into an array of strings and remove DOS-format '\'
-				$appRoot = "file:///"; //Prepend "file:///" (necessary for the web browser to reference the file)
+				//$pathInPieces = explode('\\', getcwd()); //Break the full file path into an array of strings and remove DOS-format '\'
+				//$appRoot = "file:///"; //Prepend "file:///" (necessary for the web browser to reference the file)
 				
 				//$appRoot = "file:///FRANCIS-PC/"; -> attempting to use shared folder for images
 				//for ($x = 3; $x < count($pathInPieces)-1; ++$x) ->cuts off prepended "C:\xampp\etc..." to prepend with location of shared folder
 				
 				//For each piece of the file path
-				for ($x = 0; $x < count($pathInPieces)-1; ++$x)
-				{
-					$appRoot .= $pathInPieces[$x].'/'; //Rebuild file path with '/'s (web browsers won't read DOS-format paths)
-				}
-				$appRoot .= 'Images/'; //Append final piece of file path
+				//for ($x = 0; $x < count($pathInPieces)-1; ++$x)
+				//{
+				//	$appRoot .= $pathInPieces[$x].'/'; //Rebuild file path with '/'s (web browsers won't read DOS-format paths)
+				//}
+				$appRoot = '../Images/'; //Append final piece of file path
 				
 				// Strip path information
 				$filename = basename($this->request->params['form']['advertisement']['name']);
@@ -201,9 +201,9 @@
 						$file = "'".$appRoot.$filename."'"; //Format path string to be passed in SQL query
 						
 						//Perform an UPDATE query
-						$this->Qadvertisement->query("UPDATE `onq`.`qadvertisements` 
-													SET `qadvertisements`.`advertisement` = ".$file. 
-													" WHERE `qadvertisements`.`advertisementID` <= ".$id.";");
+						$this->Qadvertisement->query("UPDATE `studywithonq_db`.`Qadvertisements` 
+													SET `Qadvertisements`.`advertisement` = ".$file. 
+													" WHERE `Qadvertisements`.`advertisementID` <= ".$id.";");
 						
 						//If the update succeeds
 						if ($this->Qadvertisement->find('first', array('conditions' =>
@@ -225,10 +225,10 @@
 										$qadvertisement['Qadvertisement']['advertisement']))))
 								{
 									//Reformat file path to DOS-format
-									$pathPieces = explode('file:///', $qadvertisement['Qadvertisement']['advertisement']);
-									$path = str_replace("/", "\\", $pathPieces[1]);
+									//$pathPieces = explode('file:///', $qadvertisement['Qadvertisement']['advertisement']);
+									//$path = str_replace("/", "\\", $pathPieces[1]);
 									//Delete the ad image
-									unlink($path);
+									unlink($qadvertisement['Qadvertisement']['advertisement']);
 								}
 							}
 							$this->Session->setFlash(__('Your advertisment has been updated.'));
@@ -293,10 +293,10 @@
 							$qadvertisement['Qadvertisement']['advertisement']))))
 					{
 						//Reformat file path to DOS-format
-						$pathPieces = explode('file:///', $qadvertisement['Qadvertisement']['advertisement']);
-						$path = str_replace("/", "\\", $pathPieces[1]);
+						//$pathPieces = explode('file:///', $qadvertisement['Qadvertisement']['advertisement']);
+						//$path = str_replace("/", "\\", $pathPieces[1]);
 						//Delete the ad image
-						unlink($path);
+						unlink($qadvertisement['Qadvertisement']['advertisement']);
 					}
 				}
 				$this->Session->setFlash(__('The advertisement with id: %s has been deleted.', h($id)));

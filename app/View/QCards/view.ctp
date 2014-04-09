@@ -1,3 +1,6 @@
+<head>
+			
+</head>
 <table name="viewCard" class="table">
 <tr>
 <th>

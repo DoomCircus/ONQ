@@ -12,7 +12,7 @@ class Qachievement extends AppModel {
 		return true;
 	}
 	
-	public $useTable = 'Qprofileachievments';
+	public $useTable = 'Qachievements';
 	
   
 }

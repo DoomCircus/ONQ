@@ -15,7 +15,7 @@ class QProfilesController extends AppController {
 		if($this->Auth->user('role')=='user' || $this->Auth->user('role')=='admin')
 		{
 			$this->set('role', $this->Auth->user('role')); 
-			$this->Auth->allow('index','logout','view');//add this line for normal users
+			$this->Auth->allow('index','logout','view','edit');//add this line for normal users
 		}
 		else
 		{
@@ -86,6 +86,8 @@ class QProfilesController extends AppController {
 			date_default_timezone_set($timezone);
 			$date = date('Y-m-d H:i:s');
 			$this->request->data['Qprofile']['dateCreated'] = $date;
+			$addressID=$this->Qaddress->getLastInsertId();
+			$this->request->data['Qprofile']['addressID'] = $addressID;
 			
             if ($this->Qprofile->save($this->request->data)) 
 			{
@@ -118,13 +120,13 @@ class QProfilesController extends AppController {
 			}
 			
 			//Move up from 'webroot' folder (into 'app') then into 'Images' folder
-			$pathInPieces = explode('\\', getcwd());
-			$appRoot = "file:///";
-			for ($x = 0; $x < count($pathInPieces)-1; ++$x)
-			{
-				$appRoot .= $pathInPieces[$x].'/';
-			}
-			$appRoot .= 'Images/';
+			//$pathInPieces = explode('\\', getcwd());
+			//$appRoot = "file:///";
+			//for ($x = 0; $x < count($pathInPieces)-1; ++$x)
+			//{
+			//	$appRoot .= $pathInPieces[$x].'/';
+			//}
+			$appRoot = '../Images/';
 			
 			// Strip path information
 			$filename = basename($this->request->params['form']['profilePic']['name']);
@@ -140,7 +142,7 @@ class QProfilesController extends AppController {
 			
 			debug($this->Qprofile->create());
 			//set role to user for general user
-			$this->request->data['Qprofile']['role'] = 'user';
+			//$this->request->data['Qprofile']['role'] = 'user';
 			//set time created and timezone
 			$timezone = date_default_timezone_get();
 			date_default_timezone_set($timezone);
@@ -168,7 +170,7 @@ class QProfilesController extends AppController {
 					{
 						//Only store path to app\Images\[image.*] in database
 						$this->request->data['Qprofile']['profilePic'] = $appRoot.$filename;
-						
+						debug($this->request->data);
 						if ($this->Qprofile->save($this->request->data['Qprofile'])) 
 						{
 							move_uploaded_file(
@@ -271,7 +273,7 @@ class QProfilesController extends AppController {
 		),
 		'fields' => array('QaddressJoin.*','QprofileJoin.*')
 		));
-		
+		debug($qprofile);
 		if (!$qprofile) 
 		{
 			throw new NotFoundException(__('Invalid group'));
@@ -279,27 +281,25 @@ class QProfilesController extends AppController {
 		
 		if ($this->request->is(array('post', 'put'))) 
 		{
-		$uploadedFile = $this->request->params['form']['picture']['name'];
-		$tmp = $this->request->params['form']['picture']['tmp_name'];
-		
-		$firstName = $this->request->data['QprofileJoin']['firstName'];
-		$lastName = $this->request->data['QprofileJoin']['lastName'];
-		$unitNumber = $this->request->data['QaddressJoin']['unitNumber'];
-		$streetNumber = $this->request->data['QaddressJoin']['streetNumber'];
-		$streetName = $this->request->data['QaddressJoin']['streetName'];
-		$provinceState = $this->request->data['QaddressJoin']['stateProvince'];
-		$postalCode = $this->request->data['QaddressJoin']['postalCode'];
-		
-		//$myfile = is_uploaded_file($uploadedFile);
-		//$work = $this->editImage($uploadedFile);
-		
-		debug($uploadedFile);
-		debug($tmp);
-		 $this->editImage($uploadedFile, $tmp,$this->data['QprofileJoin']['profileID'],$qprofile);
-		if ($this->Qprofile->updateAll(array('Qprofile.firstName'=>"'$firstName'",'Qprofile.lastname'=>"'$lastName'"),
-		array('Qprofile.profileID' => $this->data['QprofileJoin']['profileID'])))
+			$uploadedFile = $this->request->params['form']['picture']['name'];
+			$tmp = $this->request->params['form']['picture']['tmp_name'];
+			
+			$emailAddress = $this->request->data['QprofileJoin']['emailAddress'];
+			$phoneNumber = $this->request->data['QprofileJoin']['phoneNumber'];
+			$firstName = $this->request->data['QprofileJoin']['firstName'];
+			$lastName = $this->request->data['QprofileJoin']['lastName'];
+			$unit = $this->request->data['QaddressJoin']['unit'];
+			$streetNumber = $this->request->data['QaddressJoin']['streetNumber'];
+			$streetName = $this->request->data['QaddressJoin']['streetName'];
+			$city = $this->request->data['QaddressJoin']['city'];
+			$provinceState = $this->request->data['QaddressJoin']['stateProvince'];
+			$postalCode = $this->request->data['QaddressJoin']['postalCode'];
+			$this->editImage($uploadedFile, $tmp,$this->data['QprofileJoin']['profileID'],$qprofile);
+			
+			if ($this->Qprofile->updateAll(array('Qprofile.firstName'=>"'$firstName'",'Qprofile.lastname'=>"'$lastName'",'Qprofile.emailAddress'=>"'$emailAddress'",'Qprofile.phoneNumber'=>"'$phoneNumber'"),
+			array('Qprofile.profileID' => $this->data['QprofileJoin']['profileID'])))
 			{
-				if($this->Qaddress->updateAll(array('Qaddress.unitNumber'=>"'$unitNumber'",'Qaddress.streetNumber'=>"'$streetNumber'",'Qaddress.streetName'=>"'$streetName'",	'Qaddress.stateProvince'=>"'$provinceState'",'Qaddress.postalCode'=>"'$postalCode'"),
+				if($this->Qaddress->updateAll(array('Qaddress.unit'=>"'$unit'",'Qaddress.streetNumber'=>"'$streetNumber'",'Qaddress.streetName'=>"'$streetName'",'Qaddress.city'=>"'$city'",	'Qaddress.stateProvince'=>"'$provinceState'",'Qaddress.postalCode'=>"'$postalCode'"),
 				array('Qaddress.addressID' => $this->data['QprofileJoin']['addressID'])))
 				{
 					$this->Session->setFlash(__('Your group has been updated.'));
@@ -317,7 +317,6 @@ class QProfilesController extends AppController {
 		if (!$this->request->data) 
 		{
 			$this->request->data = $qprofile;
-	//		$this->request->data = $qaddress;
 		}
 		$this->set('qprofile', $qprofile);
     }
@@ -401,96 +400,96 @@ class QProfilesController extends AppController {
    
    public function editImage($image = null, $tmp,$pid,$qprofile)
    {
-   	//Move up from 'webroot' folder (into 'app') then into 'Images' folder
-				$pathInPieces = explode('\\', getcwd()); //Break the full file path into an array of strings and remove DOS-format '\'
-				$appRoot = "file:///"; //Prepend "file:///" (necessary for the web browser to reference the file)
-				
-				//$appRoot = "file:///FRANCIS-PC/"; -> attempting to use shared folder for images
-				//for ($x = 3; $x < count($pathInPieces)-1; ++$x) ->cuts off prepended "C:\xampp\etc..." to prepend with location of shared folder
-				
-				//For each piece of the file path
-				for ($x = 0; $x < count($pathInPieces)-1; ++$x)
-				{
-					$appRoot .= $pathInPieces[$x].'/'; //Rebuild file path with '/'s (web browsers won't read DOS-format paths)
-				}
-				$appRoot .= 'Images/'; //Append final piece of file path
-				
-				// Strip path information
-				$filename = basename($image);
-				
-				$maxPath = 255; //Max characters allowed in column in Qadvertisements table
-				$allowedNameLength = $maxPath - strlen($appRoot); //Max allowed characters for file name (including extension)
-				
-				//If the file name is within the allowed number of characters
-				if (strlen($filename) <= $allowedNameLength)
-				{
-					$buffer = $filename; //Make a copy of the file name to preserve the original
-					$filenamePieces = explode('.', $buffer);
-					
-					//If the file name only broke into 2 pieces (2 < indicates no extension, 2 > indicates hidden extension)
-					//and if no special characters are found in the file name/extension (same allowable characters as in Windows)
-					if (count($filenamePieces) == 2 && !strpbrk($filenamePieces[0], '\\/:*?"<>|.'))
-					{
-						$file = "'".$appRoot.$filename."'"; //Format path string to be passed in SQL query
-						
-						//Perform an UPDATE query
-						$this->Qprofile->query("UPDATE `onq`.`qprofiles` 
-													SET `qprofiles`.`profilePic` = ".$file. 
-													" WHERE `qprofiles`.`profileID` = ".$pid.";");
-						
-						//If the update succeeds
-						if ($this->Qprofile->find('first', array('conditions' =>
-														array('Qprofile.profileID'=> $pid,
-														'Qprofile.profilePic'=> $appRoot.$filename))) != NULL)
-						{
-							//Move file to OnQ Images folder
-							move_uploaded_file(
-								$tmp,
-								$appRoot.$filename
-							);
-							
-							//If the file exists
-							if (file_exists($qprofile['QprofileJoin']['profilePic']))
-							{
-								//If the ad is not referenced in another row
-								if (!$this->Qprofile->find(
-										'first', array('conditions' => array('Qprofile.profilePic'=> 
-										$qprofile['QprofileJoin']['profilePic']))))
-								{
-									//Reformat file path to DOS-format
-									$pathPieces = explode('file:///', $qprofile['QprofileJoin']['profilePic']);
-									$path = str_replace("/", "\\", $pathPieces[1]);
-									//Delete the ad image
-									unlink($path);
-								}
-							}
-							$this->Session->setFlash(__('Your advertisment has been updated.'));
-							//return $this->redirect(array('action' => 'index')); //Return the user to index.ctp
-						}
-						else //Update failed
-						{
-							$this->Session->setFlash(__('Unable to update your advertisment.'));
-						}
-					}
-					else  //No file extension or more than one found/Special characters found in file name
-					{
-						$this->Session->setFlash(__('The file name contains unallowable characters, remove all special characters --> \\/:*?"<>|. <--
-													except for the "." before the file extension (yourfile.jpeg) and try again.'));
-					}
-				}
-				else //File path is too large for the database
-				{
-						$this->Session->setFlash(__('The file name entered is too long, it can be no longer than %d characters with the extension.', 
-													$allowedPathLength));
-				}
+		//Move up from 'webroot' folder (into 'app') then into 'Images' folder
+		//$pathInPieces = explode('\\', getcwd()); //Break the full file path into an array of strings and remove DOS-format '\'
+		//$appRoot = "file:///"; //Prepend "file:///" (necessary for the web browser to reference the file)
+		
+		//$appRoot = "file:///FRANCIS-PC/"; -> attempting to use shared folder for images
+		//for ($x = 3; $x < count($pathInPieces)-1; ++$x) ->cuts off prepended "C:\xampp\etc..." to prepend with location of shared folder
+		
+		//For each piece of the file path
+		//for ($x = 0; $x < count($pathInPieces)-1; ++$x)
+		//{
+		//	$appRoot .= $pathInPieces[$x].'/'; //Rebuild file path with '/'s (web browsers won't read DOS-format paths)
+		//}
+		$appRoot = '../Images/'; //Append final piece of file path
 			
-
-			//If there is no request data
-			if (!$this->request->data) 
+		// Strip path information
+		$filename = basename($image);
+		
+		$maxPath = 255; //Max characters allowed in column in Qadvertisements table
+		$allowedNameLength = $maxPath - strlen($appRoot); //Max allowed characters for file name (including extension)
+		
+		//If the file name is within the allowed number of characters
+		if (strlen($filename) <= $allowedNameLength)
+		{
+			$buffer = $filename; //Make a copy of the file name to preserve the original
+			$filenamePieces = explode('.', $buffer);
+			
+			//If the file name only broke into 2 pieces (2 < indicates no extension, 2 > indicates hidden extension)
+			//and if no special characters are found in the file name/extension (same allowable characters as in Windows)
+			if (count($filenamePieces) == 2 && !strpbrk($filenamePieces[0], '\\/:*?"<>|.'))
 			{
-				//Set the current advertisement to request data
-				$this->request->data = $Qprofile;
+				$file = "'".$appRoot.$filename."'"; //Format path string to be passed in SQL query
+				
+				//Perform an UPDATE query
+				$this->Qprofile->query("UPDATE `studywithonq_db`.`Qprofiles` 
+											SET `Qprofiles`.`profilePic` = ".$file. 
+											" WHERE `Qprofiles`.`profileID` = ".$pid.";");
+				
+				//If the update succeeds
+				if ($this->Qprofile->find('first', array('conditions' =>
+												array('Qprofile.profileID'=> $pid,
+												'Qprofile.profilePic'=> $appRoot.$filename))) != NULL)
+				{
+					//Move file to OnQ Images folder
+					move_uploaded_file(
+						$tmp,
+						$appRoot.$filename
+					);
+					
+					//If the file exists
+					if (file_exists($qprofile['QprofileJoin']['profilePic']))
+					{
+						//If the ad is not referenced in another row
+						if (!$this->Qprofile->find(
+								'first', array('conditions' => array('Qprofile.profilePic'=> 
+								$qprofile['QprofileJoin']['profilePic']))))
+						{
+							//Reformat file path to DOS-format
+							//$pathPieces = explode('file:///', $qprofile['QprofileJoin']['profilePic']);
+							//$path = str_replace("/", "\\", $pathPieces[1]);
+							//Delete the ad image
+							unlink($qprofile['QprofileJoin']['profilePic']);
+						}
+					}
+					$this->Session->setFlash(__('Your profile picture has been updated.'));
+					//return $this->redirect(array('action' => 'index')); //Return the user to index.ctp
+				}
+				else //Update failed
+				{
+					$this->Session->setFlash(__('Unable to update your profile picture.'));
+				}
 			}
+			else  //No file extension or more than one found/Special characters found in file name
+			{
+				$this->Session->setFlash(__('The file name contains unallowable characters, remove all special characters --> \\/:*?"<>|. <--
+											except for the "." before the file extension (yourfile.jpeg) and try again.'));
+			}
+		}
+		else //File path is too large for the database
+		{
+				$this->Session->setFlash(__('The file name entered is too long, it can be no longer than %d characters with the extension.', 
+											$allowedPathLength));
+		}
+	
+
+		//If there is no request data
+		if (!$this->request->data) 
+		{
+			//Set the current advertisement to request data
+			$this->request->data = $Qprofile;
+		}
 	
    }
    

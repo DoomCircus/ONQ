@@ -127,7 +127,7 @@
 				<?php
 					echo $this->Html->link(
 						'Play', 
-						array('controller' => 'qdeckcards' ,'action' => 'play', $Qdeck['Qd']['deckID'])
+						array('controller' => 'qdeckcards' ,'action' => 'play', $Qdeck['Qd']['deckID'], $groupID, $returnUrl)
 					);
 				?>	
 				</li>				

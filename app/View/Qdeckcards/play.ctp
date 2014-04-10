@@ -140,7 +140,41 @@ background-image: linear-gradient(to bottom, #FFFFFF 0%, #B4DFFA 100%);
 					?>
 			</div>
 		</div>
-<br/>
+		
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>	
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>	
+</br>
+</br>
+</br>
+</br>
+</br>	
+</br>
+		<?php
+	
+			if($retUrl != null)
+			{
+		
+				echo $this->Html->link(
+				'Back To Group Decks', 
+				array('controller' => 'Qgroupdecks' ,'action' => 'index', $groupID),
+				array('class' => 'signbutton')
+				);			
+			}
+				
+				
+		?>
+</br>
 	</body>
 	<script>
 	var myCards = <?php echo json_encode($Qcards); ?>;

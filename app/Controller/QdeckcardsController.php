@@ -234,42 +234,42 @@ class QdeckcardsController extends AppController {
         $this->set('qdeck', $qdeck);
     }
 	
-		public function play($deckID) {  
-	$Qcards = $this->Qdeckcard->find('all',array(
-	 'joins' => array(
-        array(
-            'table' => 'Qcards',
-            'type' => 'INNER',
-			'alias' => 'Qc',
-            'conditions' => array(
-                'Qc.cardID = Qdeckcard.cardID'
-            )
-        )
-    ),
-    'conditions' => array(
-        'Qdeckcard.deckID' => $deckID
-    ),
-    'fields' => array('Qc.*','Qdeckcard.*')
-	));
-    
-	$cardIndex = 0;
+	public function play($deckID,$GID=null,$returnUrl=null) {  
+		$Qcards = $this->Qdeckcard->find('all',array(
+		 'joins' => array(
+			array(
+				'table' => 'Qcards',
+				'type' => 'INNER',
+				'alias' => 'Qc',
+				'conditions' => array(
+					'Qc.cardID = Qdeckcard.cardID'
+				)
+			)
+		),
+		'conditions' => array(
+			'Qdeckcard.deckID' => $deckID
+		),
+		'fields' => array('Qc.*','Qdeckcard.*')
+		));
+		
+		$cardIndex = 0;
 
-	if($returnUrl != null)
-	{
-		$myurl = $returnUrl.'/'.$GID;
-		$this->set('groupID', $GID);
-	}
-	else
-	{
-		$myurl= null;
-	}
-	$this->set('retUrl', $myurl);
-	$this->set('Qcards', $Qcards);
-	$this->set('deckID', $deckID);
-	$this->set('userID', $this->Auth->user('profileID'));
-	$cardCount = count($Qcards);
-	$this->set('cardCount', $cardCount);
-	//debug($Qcards);
+		if($returnUrl != null)
+		{
+			$myurl = $returnUrl.'/'.$GID;
+			$this->set('groupID', $GID);
+		}
+		else
+		{
+			$myurl= null;
+		}
+		$this->set('retUrl', $myurl);
+		$this->set('Qcards', $Qcards);
+		$this->set('deckID', $deckID);
+		$this->set('userID', $this->Auth->user('profileID'));
+		$cardCount = count($Qcards);
+		$this->set('cardCount', $cardCount);
+		//debug($Qcards);
     }
 	
 	public function test($deckID,$GID=null,$returnUrl=null)
